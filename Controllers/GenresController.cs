@@ -79,6 +79,8 @@ namespace GameShop.Controllers
         [HttpPost]
         public async Task<ActionResult<Genres>> PostGenres(Genres genres)
         {
+            if (!_context.Genres.Any(g => g.Name == genres.Name)) return BadRequest();
+
             _context.Genres.Add(genres);
             await _context.SaveChangesAsync();
 

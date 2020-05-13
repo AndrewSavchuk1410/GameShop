@@ -1,0 +1,151 @@
+﻿<div class="container">
+    <div class="btn-group">
+        <button class="btn btn-primary" (click)="changeMode(1)">Жарни</button>
+        <button class="btn btn-primary" (click)="changeMode(2)">Ігри</button>
+        <br>
+    </div>
+
+    <ng-template [ngIf]="mode==1">
+
+        <h1>Список жанрів</h1>
+        <br>
+        <button class="btn btn-primary" (click)="add()"><i class="fas fa-plus"> Додати</i></button>
+        <table *ngIf="tableMode; else create" class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Назва</td>
+                    <td>Інформація</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let g of genres">
+                    <ng-template [ngIf]="genre?.id != g.id" [ngIfElse]="edit">
+                        <td>{{g?.name}}</td>
+                        <td>{{g?.info}}</td>
+                        <td>
+                            <button (click)="editGenre(g)" class="btn btn-success"><i class="fas fa-edit"></i> Змінити</button>
+                            <button (click)="delete(g)" class="btn btn-warning"><i class="fas fa-trash-alt"></i> Видалити</button>
+                        </td>
+                    </ng-template>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--шаблон для редактирования-->
+        <ng-template #edit>
+            <td>
+                <input type="text" [(ngModel)]="genre.name" class="form-control" />
+            </td>
+            <td>
+                <input type="text" [(ngModel)]="genre.info" class="form-control" />
+            </td>
+            <td>
+                <button (click)="save()" class="btn btn-success"><i class="fas fa-check"></i> Зберегти</button>
+                <button (click)="cancel()" class="btn btn-warning"><i class="fa fa-times"></i> Відмінити</button>
+            </td>
+        </ng-template>
+
+        <!--шаблон для добавления-->
+        <ng-template #create>
+            <div class="form-group">
+                <label>Назва</label>
+                <input type="text" [(ngModel)]="genre.name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Інформація</label>
+                <input type="text" [(ngModel)]="genre.info" class="form-control" />
+            </div>
+            <div>
+                <button (click)="save()" class="btn btn-success"><i class="fas fa-check"></i> Зберегти</button> 
+                <button (click)="cancel()" class="btn btn-warning"><i class="fa fa-times"></i> Відмінити</button>
+            </div>
+        </ng-template>
+    </ng-template>
+
+    <ng-template [ngIf]="mode==2">
+
+        <br>
+        <h1>Список ігор</h1>
+    
+        <button class="btn btn-primary" (click)="add1()"><i class="fas fa-plus"> Додати</i></button>
+        <table *ngIf="tableMode1; else create1" class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Назва</td>
+                    <td>Інформація</td>
+                    <td>Ігровий двигун</td>
+                    <td>Жанр</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let g of games">
+                    <ng-template [ngIf]="game?.id != g.id" [ngIfElse]="edit1">
+                        <td>{{g?.name}}</td>
+                        <td>{{g?.info}}</td>
+                        <td>{{g?.engine}}</td>
+                        <td>{{findGameGenre(g)}}</td>
+                        <td>
+                            <button (click)="editGame(g)" class="btn btn-success"><i class="fas fa-edit"></i> Змінити</button>
+                            <button (click)="delete1(g)" class="btn btn-warning"><i class="fas fa-trash-alt"></i> Видалити</button>
+                        </td>
+                    </ng-template>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--шаблон для редактирования-->
+        <ng-template #edit1>
+            <td>
+                <input type="text" [(ngModel)]="game.name" class="form-control" />
+            </td>
+            <td>
+                <input type="text" [(ngModel)]="game.info" class="form-control" />
+            </td>
+            <td>
+                <input type="text" [(ngModel)]="game.engine" class="form-control" />
+            </td>
+            <td>
+                <select [(ngModel)]="game.genresId" class="form-control">
+                    <option *ngFor="let gg of genres" [ngValue]="gg?.id">
+                        {{gg?.name}}
+                    </option>
+                </select>
+            </td>
+            <td>
+                <button (click)="save1()" class="btn btn-success"><i class="fas fa-check"></i> Зберегти</button>
+                <button (click)="cancel1()" class="btn btn-warning"><i class="fa fa-times"></i> Відмінити</button>
+            </td>
+        </ng-template>
+
+        <!--шаблон для добавления-->
+        <ng-template #create1>
+            <div class="form-group">
+                <label>Назва</label>
+                <input type="text" [(ngModel)]="game.name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Інформація</label>
+                <input type="text" [(ngModel)]="game.info" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Ігровий двигун</label>
+                <input type="text" [(ngModel)]="game.engine" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Жанр</label>
+                <select [(ngModel)]="game.genresId" class="form-control">
+                    <option *ngFor="let gg of genres" [ngValue]="gg?.id">
+                        {{gg?.name}}
+                    </option>
+                </select>
+            </div>
+            <div>
+                <button (click)="save1()" class="btn btn-success"><i class="fas fa-check"></i> Зберегти</button>
+                <button (click)="cancel1()" class="btn btn-warning"><i class="fa fa-times"></i> Відмінити</button>
+            </div>
+        </ng-template>
+    </ng-template>
+
+</div>
